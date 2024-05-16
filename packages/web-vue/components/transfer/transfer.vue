@@ -6,6 +6,7 @@
       :title="sourceTitle"
       :data-info="dataInfo.sourceInfo"
       :data="dataInfo.sourceInfo.data"
+      :disabled="mergedDisabled"
       :selected="computedSelected"
       :show-search="showSearch"
       :show-select-all="showSelectAll"
@@ -30,7 +31,7 @@
         @click="handleClick('target')"
       >
         <template #icon>
-          <icon-right />
+          <slot name="to-target-icon"> <icon-right /> </slot>
         </template>
       </arco-button>
       <arco-button
@@ -43,7 +44,7 @@
         @click="handleClick('source')"
       >
         <template #icon>
-          <icon-left />
+          <slot name="to-source-icon"><icon-left /></slot>
         </template>
       </arco-button>
     </div>
@@ -53,6 +54,7 @@
       :title="targetTitle"
       :data-info="dataInfo.targetInfo"
       :data="dataInfo.targetInfo.data"
+      :disabled="mergedDisabled"
       :selected="computedSelected"
       :allow-clear="oneWay"
       :show-search="showSearch"
@@ -281,6 +283,18 @@ export default defineComponent({
    * @binding {() => void} onClear
    * @version 2.45.0
    */
+  /**
+   * @zh 移至源图标插槽
+   * @en To source icon slot
+   * @slot to-source-icon
+   * @version 2.52.0
+   */
+  /**
+   * @zh 移至目标图标插槽
+   * @en To target icon slot
+   * @slot to-target-icon
+   * @version 2.52.0
+   */
   setup(props, { emit, slots }) {
     const { mergedDisabled, eventHandlers } = useFormItem({
       disabled: toRef(props, 'disabled'),
@@ -398,6 +412,7 @@ export default defineComponent({
       cls,
       dataInfo,
       computedSelected,
+      mergedDisabled,
       sourceTitle,
       targetTitle,
       handleClick,

@@ -184,6 +184,17 @@ const OverflowListEn = () =>
 const Scrollbar = () => import('@web-vue/components/scrollbar/README.zh-CN.md');
 const ScrollbarEn = () =>
   import('@web-vue/components/scrollbar/README.en-US.md');
+const Watermark = () => import('@web-vue/components/watermark/README.zh-CN.md');
+const WatermarkEn = () =>
+  import('@web-vue/components/watermark/README.en-US.md');
+const VerificationCode = () =>
+  import('@web-vue/components/verification-code/README.zh-CN.md');
+const VerificationCodeEn = () =>
+  import('@web-vue/components/verification-code/README.en-US.md');
+const ColorPicker = () =>
+  import('@web-vue/components/color-picker/README.zh-CN.md');
+const ColorPickerEn = () =>
+  import('@web-vue/components/color-picker/README.en-US.md');
 
 const docs = [
   {
@@ -453,6 +464,11 @@ const components = [
         componentEn: CheckboxEn,
       },
       {
+        name: 'colorPicker',
+        component: ColorPicker,
+        componentEn: ColorPickerEn,
+      },
+      {
         name: 'datePicker',
         component: DatePicker,
         componentEn: DatePickerEn,
@@ -471,6 +487,11 @@ const components = [
         name: 'inputNumber',
         component: InputNumber,
         componentEn: InputNumberEn,
+      },
+      {
+        name: 'verificationCode',
+        component: VerificationCode,
+        componentEn: VerificationCodeEn,
       },
       {
         name: 'inputTag',
@@ -671,6 +692,11 @@ const components = [
         name: 'scrollbar',
         component: Scrollbar,
         componentEn: ScrollbarEn,
+      },
+      {
+        name: 'watermark',
+        component: Watermark,
+        componentEn: WatermarkEn,
       },
     ],
   },

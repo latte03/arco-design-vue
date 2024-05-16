@@ -150,11 +150,19 @@ export default defineComponent({
     /**
      * @zh 只读
      * @en Readonly
-     * @version 3.33.1
+     * @version 2.33.1
      */
     readOnly: {
       type: Boolean,
       default: false,
+    },
+    /**
+     * @zh 内部 input 元素的属性
+     * @en Attributes of inner input elements
+     * @version 2.52.0
+     */
+    inputAttrs: {
+      type: Object,
     },
   },
   emits: {
@@ -329,39 +337,14 @@ export default defineComponent({
       if (finalValue !== valueNumber.value || _value.value !== stringValue) {
         _value.value = stringValue;
       }
-
       emit('update:modelValue', finalValue);
     };
-    watch(
-      () => props.min,
-      (newVal) => {
-        const _isMin =
-          isNumber(valueNumber.value) && valueNumber.value <= newVal;
-        if (isMin.value !== _isMin) {
-          isMin.value = _isMin;
-        }
 
-        const isExceedMinValue =
-          isNumber(valueNumber.value) && valueNumber.value < newVal;
-        if (isExceedMinValue) {
-          handleExceedRange();
-        }
-      }
-    );
     watch(
-      () => props.max,
-      (newVal) => {
-        const _isMax =
-          isNumber(valueNumber.value) && valueNumber.value >= newVal;
-        if (isMax.value !== _isMax) {
-          isMax.value = _isMax;
-        }
-
-        const isExceedMaxValue =
-          isNumber(valueNumber.value) && valueNumber.value > newVal;
-        if (isExceedMaxValue) {
-          handleExceedRange();
-        }
+      () => [props.max, props.min],
+      () => {
+        handleExceedRange();
+        updateNumberStatus(valueNumber.value);
       }
     );
 
@@ -413,10 +396,12 @@ export default defineComponent({
       if (isNumber(Number(value)) || /^(\.|-)$/.test(value)) {
         _value.value = props.formatter?.(value) ?? value;
         updateNumberStatus(valueNumber.value);
+
+        emit('input', valueNumber.value, _value.value, ev);
         if (props.modelEvent === 'input') {
           emit('update:modelValue', valueNumber.value);
+          emit('change', valueNumber.value, ev);
         }
-        emit('input', valueNumber.value, _value.value, ev);
       }
     };
 
@@ -425,23 +410,12 @@ export default defineComponent({
     };
 
     const handleChange = (value: string, ev: Event) => {
-      const finalValue = getLegalValue(valueNumber.value);
-      const stringValue = getStringValue(finalValue);
-      if (finalValue !== valueNumber.value || _value.value !== stringValue) {
-        _value.value = stringValue;
-        updateNumberStatus(finalValue);
+      if (ev instanceof MouseEvent && !value) {
+        return;
       }
 
-      nextTick(() => {
-        if (isNumber(props.modelValue) && props.modelValue !== finalValue) {
-          // TODO: verify number
-          _value.value = getStringValue(props.modelValue);
-          updateNumberStatus(props.modelValue);
-        }
-      });
-
-      emit('update:modelValue', finalValue);
-      emit('change', finalValue, ev);
+      handleExceedRange();
+      emit('change', valueNumber.value, ev);
     };
 
     const handleBlur = (ev: FocusEvent) => {
@@ -492,7 +466,9 @@ export default defineComponent({
       }
       return (
         <>
-          {slots.suffix?.()}
+          {slots.suffix && (
+            <div class={`${prefixCls}-suffix`}>{slots.suffix?.()}</div>
+          )}
           <div class={`${prefixCls}-step`}>
             <button
               class={[
@@ -610,6 +586,7 @@ export default defineComponent({
             'aria-valuemax': props.max,
             'aria-valuemin': props.min,
             'aria-valuenow': _value.value,
+            ...props.inputAttrs,
           }}
           onInput={handleInput}
           onFocus={handleFocus}

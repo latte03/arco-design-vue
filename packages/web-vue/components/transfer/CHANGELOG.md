@@ -2,6 +2,33 @@
 changelog: true
 ```
 
+## 2.55.2
+
+`2024-05-10`
+
+### 🐛 BugFix
+
+- fix disabled behavior in transfer simple mode ([#3067](https://github.com/arco-design/arco-design-vue/pull/3067))
+
+
+## 2.54.6
+
+`2024-03-01`
+
+### 🐛 BugFix
+
+- fix disabled props not working ([#2996](https://github.com/arco-design/arco-design-vue/pull/2996))
+
+
+## 2.52.0
+
+`2023-09-22`
+
+### 🆕 Feature
+
+- add an action icon slot ([#2708](https://github.com/arco-design/arco-design-vue/pull/2708))
+
+
 ## 2.50.1
 
 `2023-08-18`

@@ -2,6 +2,42 @@
 changelog: true
 ```
 
+## 2.54.5
+
+`2024-02-21`
+
+### 🐛 BugFix
+
+- refactor date utility functions and week picker to correctly show selected week ([#2970](https://github.com/arco-design/arco-design-vue/pull/2970))
+
+
+## 2.54.0
+
+`2023-12-15`
+
+### 🐛 BugFix
+
+- resolve arrow click issue in range-picker ([#2865](https://github.com/arco-design/arco-design-vue/pull/2865))
+
+
+## 2.53.3
+
+`2023-11-24`
+
+### 🐛 BugFix
+
+- fix invalid date due to mismatch between date and format ([#2789](https://github.com/arco-design/arco-design-vue/pull/2789))
+
+
+## 2.52.0
+
+`2023-09-22`
+
+### 🐛 BugFix
+
+- fix incorrect display of operations in range selector ([#2712](https://github.com/arco-design/arco-design-vue/pull/2712))
+
+
 ## 2.47.0
 
 `2023-06-02`

@@ -87,7 +87,7 @@ export default defineComponent({
     },
     /**
      * @zh 默认是否可见，非受控
-     * @en Default visiblity
+     * @en Default visibility
      */
     defaultVisible: {
       type: Boolean,
@@ -129,7 +129,7 @@ export default defineComponent({
      * @en Set the mount point of the pop-up box, the same as the `to` of `teleport`, the default value is document.body
      */
     popupContainer: {
-      type: [Object, String] as PropType<HTMLElement | string>,
+      type: [String, Object] as PropType<string | HTMLElement>,
     },
   },
   emits: [
@@ -152,7 +152,7 @@ export default defineComponent({
    * @slot actions
    * @version 2.46.0
    */
-  setup(props: ImagePreviewGroupProps, { emit }) {
+  setup(props, { emit }) {
     const {
       srcList,
       visible,
