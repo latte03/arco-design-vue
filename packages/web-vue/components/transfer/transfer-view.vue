@@ -22,6 +22,7 @@
             v-else
             :model-value="checked"
             :indeterminate="indeterminate"
+            :disabled="disabled"
             uninject-group-context
             @change="handleSelectAllChange"
           >
@@ -30,6 +31,7 @@
         </span>
         <icon-hover
           v-if="allowClear"
+          :disabled="disabled"
           :class="`${prefixCls}-header-clear-btn`"
           @click="handleClear"
         >
@@ -41,7 +43,12 @@
       </slot>
     </div>
     <div v-if="showSearch" :class="`${prefixCls}-search`">
-      <input-search v-model="filter" @change="handleSearch" />
+      <input-search
+        v-model="filter"
+        :disabled="disabled"
+        v-bind="inputSearchProps"
+        @change="handleSearch"
+      />
     </div>
     <div :class="`${prefixCls}-body`">
       <Scrollbar v-if="filteredData.length > 0">
@@ -62,6 +69,7 @@
               :data="item"
               :simple="simple"
               :allow-clear="allowClear"
+              :disabled="disabled || item.disabled"
             />
           </list>
         </slot>
@@ -110,6 +118,7 @@ export default defineComponent({
       type: Array as PropType<TransferItem[]>,
       required: true,
     },
+    disabled: Boolean,
     allowClear: Boolean,
     selected: {
       type: Array as PropType<string[]>,
@@ -118,6 +127,9 @@ export default defineComponent({
     showSearch: Boolean,
     showSelectAll: Boolean,
     simple: Boolean,
+    inputSearchProps: {
+      type: Object,
+    },
   },
   emits: ['search'],
   setup(props, { emit }) {
@@ -129,13 +141,13 @@ export default defineComponent({
 
     const checked = computed(
       () =>
-        props.dataInfo.data.length > 0 &&
-        props.dataInfo.selected.length === props.dataInfo.data.length
+        props.dataInfo.selected.length > 0 &&
+        props.dataInfo.selected.length === props.dataInfo.allValidValues.length
     );
     const indeterminate = computed(
       () =>
         props.dataInfo.selected.length > 0 &&
-        props.dataInfo.selected.length < props.dataInfo.data.length
+        props.dataInfo.selected.length < props.dataInfo.allValidValues.length
     );
 
     const handleSelectAllChange = (checked: boolean) => {

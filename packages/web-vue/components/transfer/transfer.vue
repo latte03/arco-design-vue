@@ -6,10 +6,12 @@
       :title="sourceTitle"
       :data-info="dataInfo.sourceInfo"
       :data="dataInfo.sourceInfo.data"
+      :disabled="mergedDisabled"
       :selected="computedSelected"
       :show-search="showSearch"
       :show-select-all="showSelectAll"
       :simple="simple"
+      :input-search-props="sourceInputSearchProps"
       @search="handleSearch"
     >
       <template v-if="$slots.source" #default="slotData">
@@ -29,7 +31,7 @@
         @click="handleClick('target')"
       >
         <template #icon>
-          <icon-right />
+          <slot name="to-target-icon"> <icon-right /> </slot>
         </template>
       </arco-button>
       <arco-button
@@ -42,7 +44,7 @@
         @click="handleClick('source')"
       >
         <template #icon>
-          <icon-left />
+          <slot name="to-source-icon"><icon-left /></slot>
         </template>
       </arco-button>
     </div>
@@ -52,11 +54,13 @@
       :title="targetTitle"
       :data-info="dataInfo.targetInfo"
       :data="dataInfo.targetInfo.data"
+      :disabled="mergedDisabled"
       :selected="computedSelected"
       :allow-clear="oneWay"
       :show-search="showSearch"
       :show-select-all="showSelectAll"
       :simple="simple"
+      :input-search-props="targetInputSearchProps"
       @search="handleSearch"
     >
       <template v-if="$slots.target" #default="slotData">
@@ -188,6 +192,22 @@ export default defineComponent({
       type: Array as PropType<string[]>,
       default: () => ['Source', 'Target'],
     },
+    /**
+     * @zh 源选择框的搜索框配置
+     * @en Search box configuration for source selection box
+     * @version 2.51.1
+     */
+    sourceInputSearchProps: {
+      type: Object,
+    },
+    /**
+     * @zh 目标选择框的搜索框配置
+     * @en Search box configuration for target selection box
+     * @version 2.51.1
+     */
+    targetInputSearchProps: {
+      type: Object,
+    },
   },
   emits: {
     'update:modelValue': (value: string[]) => true,
@@ -262,6 +282,18 @@ export default defineComponent({
    * @binding {(checked:boolean) => void} onSelectAllChange
    * @binding {() => void} onClear
    * @version 2.45.0
+   */
+  /**
+   * @zh 移至源图标插槽
+   * @en To source icon slot
+   * @slot to-source-icon
+   * @version 2.52.0
+   */
+  /**
+   * @zh 移至目标图标插槽
+   * @en To target icon slot
+   * @slot to-target-icon
+   * @version 2.52.0
    */
   setup(props, { emit, slots }) {
     const { mergedDisabled, eventHandlers } = useFormItem({
@@ -380,6 +412,7 @@ export default defineComponent({
       cls,
       dataInfo,
       computedSelected,
+      mergedDisabled,
       sourceTitle,
       targetTitle,
       handleClick,
